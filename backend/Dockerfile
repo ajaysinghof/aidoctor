@@ -1,24 +1,24 @@
-# Use official JDK image
-FROM eclipse-temurin:17-jdk-alpine
+# ---------- Build Stage ----------
+FROM maven:3.9.6-eclipse-temurin-17 AS build
 
-# Set working directory
 WORKDIR /app
 
-# Copy Maven wrapper files
-COPY mvnw .
-COPY .mvn .mvn
-
-# Copy project files
+# Copy Maven project
 COPY pom.xml .
-COPY src src
+COPY src ./src
 
-# Build app
-RUN chmod +x mvnw
-RUN ./mvnw -q -DskipTests package
+# Build without tests
+RUN mvn -DskipTests clean package
 
-# Expose port
+# ---------- Run Stage ----------
+FROM eclipse-temurin:17-jre
+
+WORKDIR /app
+
+# Copy the JAR from build stage
+COPY --from=build /app/target/*.jar app.jar
+
 EXPOSE 8080
 
-# Run the Spring Boot app
-CMD ["java", "-jar", "target/aidoctor-backend-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
 
