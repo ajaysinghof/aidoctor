@@ -4,9 +4,7 @@ FROM eclipse-temurin:17-jdk-alpine
 # Set working directory
 WORKDIR /app
 
-# Copy Maven wrapper files
-COPY mvnw .
-COPY .mvn .mvn
+
 
 # Copy project files
 COPY pom.xml .
