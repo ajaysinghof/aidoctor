@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: ai-doctor-backend
+    env: docker
+    rootDir: backend
+    dockerfilePath: backend/Dockerfile
+    plan: free
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: aws.accessKeyId
+        sync: false
+      - key: aws.secretAccessKey
+        sync: false
+      - key: aws.region
+        value: us-east-1
+
